@@ -1,7 +1,7 @@
 import supabase from "./supabase";
 
 // Define una clase userModel para estructurar el objeto tipo User
-class userModel {
+export class userModel {
   id?: string = "";
   nombre!: string;
   email!: string;
