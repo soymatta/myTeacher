@@ -21,7 +21,7 @@ import UserProfileView from "./components/UserProfile";
 function App() {
   // Determina el rol del usuario
   const userRole =
-    (localStorage.getItem("role") as "profesor" | "estudiante") || "estudiante";
+    (localStorage.getItem("role") as "profesor" | "estudiante") || "profesor";
 
   return (
     <Routes>
