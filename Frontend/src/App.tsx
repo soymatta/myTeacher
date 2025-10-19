@@ -9,8 +9,8 @@ import Dashboard from "./pages/Dashboard";
 import TeacherSummary from "./components/TeacherSummary";
 import StudentRequest from "./components/StudentRequest";
 import Messages from "./components/Messages";
-import MiCuenta from "./components/UserAccount";
-import MiPerfil from "./components/UserProfile";
+import UserAccountPage from "./components/UserAccount";
+import UserProfileView from "./components/UserProfile";
 
 function App() {
   const userRole =
@@ -33,13 +33,13 @@ function App() {
             <Route path="requests" element={<StudentRequest />} />
             <Route path="messages" element={<Messages />} />
             <Route path="schedule" element={<Schedule />} />
-            <Route path="mi-cuenta" element={<MiCuenta />} />
+            <Route path="account" element={<UserAccountPage />} />
           </>
         ) : (
           <>
-            <Route path="mi-perfil" element={<MiPerfil />} />
+            <Route path="profile" element={<UserProfileView />} />
             <Route path="messages" element={<Messages />} />
-            <Route path="mi-cuenta" element={<MiCuenta />} />
+            <Route path="account" element={<UserAccountPage />} />
           </>
         )}
       </Route>
