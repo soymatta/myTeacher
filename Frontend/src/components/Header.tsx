@@ -1,7 +1,19 @@
 export default function TeacherHeader() {
   return (
-    <header className="bg-white py-4 px-10 flex justify-between items-center">
-      <h1 className="text-2xl font-bold text-[#0A3D62]">myTeacher</h1>
+    <header className="bg-white py-4 px-10 flex justify-between items-center w-full fixed">
+      <div className="flex items-center gap-5">
+        <h1 className="text-2xl font-bold text-[#0A3D62]">myTeacher</h1>
+        <div className="flex items-center rounded-2xl bg-[#F7F7F7] p-2 gap-3 border border-[#F7F7F7] hover:border-[#D9D9D9]">
+          <input
+            type="text"
+            placeholder="Qué te interesa aprender?"
+            className="bg-transparent outline-none px-2 w-64 text-sm"
+          />
+          <button className="rounded-2xl bg-[#0A3D62] text-white p-3 flex items-center">
+            <i className="bx  bx-search"></i>
+          </button>
+        </div>
+      </div>
       <div className="flex items-center gap-3">
         <button className="flex items-center bg-[#F7F7F7] p-3 rounded-full">
           <i className="bx  bx-message-circle-question-mark bx-xs"></i>

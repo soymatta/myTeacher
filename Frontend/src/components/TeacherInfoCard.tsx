@@ -6,7 +6,7 @@ export default function TeacherInfoCard() {
       <img
         src={teacher.image}
         alt={teacher.name}
-        className="w-24 h-24 rounded-full mx-auto"
+        className="w-24 h-24 rounded-3xl mx-auto"
       />
       <h3 className="text-xl font-semibold text-center mt-4">{teacher.name}</h3>
       <p className="text-sm text-center text-gray-500">
