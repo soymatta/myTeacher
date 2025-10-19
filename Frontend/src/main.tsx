@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import TeacherProfilePage from "./pages/TeacherProfilePage";
 
 import "./index.css";
 import Schedule from "./pages/Schedule";
@@ -19,6 +20,7 @@ root.render(
       <Route path="/Register" element={<Register/>} />
       <Route path="/Login" element={<Login />} />
       <Route path="/Schedule" element={<Schedule />} />
+      <Route path="/teacher/:id" element={<TeacherProfilePage />} />
     </Routes>
   </BrowserRouter>
 );
