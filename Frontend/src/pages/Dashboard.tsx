@@ -1,14 +1,14 @@
-// src/layouts/DashboardLayout.tsx
+// src/layouts/Dashboard.tsx
 import React from "react";
 import { Outlet } from "react-router-dom";
 import Header from "../components/Header";
 import Navbar from "../components/NavBar";
 
-interface DashboardLayoutProps {
+interface DashboardProps {
   role: "profesor" | "estudiante";
 }
 
-const DashboardLayout: React.FC<DashboardLayoutProps> = ({ role }) => {
+const Dashboard: React.FC<DashboardProps> = ({ role }) => {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Header />
@@ -21,4 +21,4 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ role }) => {
   );
 };
 
-export default DashboardLayout;
+export default Dashboard;
