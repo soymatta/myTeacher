@@ -23,7 +23,7 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route path="/teacher/:id" element={<TeacherProfilePage />} />
-      <Route path="/SearchingTeacher" element={<SearchingTeacher />} />
+      <Route path="/searching-teacher" element={<SearchingTeacher />} />
 
       {/* Dashboard con layout */}
       <Route path="/dashboard" element={<Dashboard role={userRole} />}>
