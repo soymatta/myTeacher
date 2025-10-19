@@ -13,7 +13,7 @@ const Dashboard: React.FC<DashboardProps> = ({ role }) => {
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Header />
       <Navbar role={role} />
-      <main className="flex-1 p-6">
+      <main className="flex-1 p-6 mt-28">
         {/* Aquí se renderiza la página seleccionada */}
         <Outlet />
       </main>
