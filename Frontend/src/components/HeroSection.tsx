@@ -1,15 +1,35 @@
 import { Search, MapPin } from "lucide-react";
 import CategoriesBar from "./CategoriaBar"; // 👈 importa el componente correcto
+import { useNavigate } from "react-router-dom";
+
 
 export default function HeroSection() {
+    const navigate = useNavigate();
+
+    const handleSelectRole = (role: "profesor" | "estudiante") => {
+      localStorage.setItem("role", role);
+      navigate("/login");
+    };
+
   return (
     <section className="w-full bg-gradient-to-b from-blue-100 to-blue-300 pb-12 rounded-b-3xl">
       {/* Header */}
       <div className="flex justify-between items-center px-8 py-4">
-        <h1 className="text-2xl font-bold text-blue-800">myTeacher</h1>
+        <h1 className="text-2xl font-bold text-[#0A3D62]">myTeacher</h1>
         <div className="flex gap-6 text-gray-800 font-medium">
-          <button className="hover:text-blue-600">Dar clases particulares</button>
-          <button className="hover:text-blue-600">Conectarse</button>
+          <button
+            onClick={() => handleSelectRole("profesor")}
+            className="hover:text-[#0A3D62] transition"
+          >
+            Dar clases particulares
+          </button>
+
+          <button
+            onClick={() => handleSelectRole("estudiante")}
+            className="hover:text-[#0A3D62] transition"
+          >
+            Conectarse
+          </button>
         </div>
       </div>
 

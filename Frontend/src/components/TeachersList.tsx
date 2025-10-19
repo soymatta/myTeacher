@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 interface Teacher {
   id: number;
   name: string;
@@ -38,19 +40,6 @@ const teachers: Teacher[] = [
     reviews: 15,
     image: "https://randomuser.me/api/portraits/men/75.jpg",
   },
-   {
-    id: 3,
-    name: "Isabel",
-    location: "Barranquilla",
-    mode: "Presenciales",
-    subject: "Inglés",
-    description:
-      "Licenciada en educación preescolar con 6 años de experiencia, experta en home school.",
-    price: "$60/h",
-    rating: 5,
-    reviews: 10,
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
-  },
   {
     id: 3,
     name: "Isabel",
@@ -89,11 +78,27 @@ const teachers: Teacher[] = [
     rating: 5,
     reviews: 10,
     image: "https://randomuser.me/api/portraits/women/44.jpg",
-  }
+  },
+  {
+    id: 3,
+    name: "Isabel",
+    location: "Barranquilla",
+    mode: "Presenciales",
+    subject: "Inglés",
+    description:
+      "Licenciada en educación preescolar con 6 años de experiencia, experta en home school.",
+    price: "$60/h",
+    rating: 5,
+    reviews: 10,
+    image: "https://randomuser.me/api/portraits/women/44.jpg",
+  },
   // agrega más aquí...
 ];
 
 export default function TeachersList() {
+
+  const navigate = useNavigate();
+
   return (
     <section className="px-6 py-12 max-w-7xl mx-auto">
       <h3 className="text-xl font-bold mb-6">
@@ -103,9 +108,10 @@ export default function TeachersList() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {teachers.map((t) => (
-          <div
+          <button
             key={t.id}
             className="rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition"
+            onClick={() => navigate(`/teacher/${t.id}`)}
           >
             {/* Imagen con overlay para nombre y ubicación */}
             <div className="relative">
@@ -136,10 +142,9 @@ export default function TeachersList() {
                 </span>
               </p>
             </div>
-          </div>
+          </button>
         ))}
       </div>
     </section>
   );
 }
-

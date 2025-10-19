@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import AuthInfoPanel from "../components/FormInfo";
+import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,13 +28,14 @@ const Login: React.FC = () => {
     setTimeout(() => setLoading(false), 1500);
   };
 
+
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 to-blue-300 px-6 md:px-12">
       <div className="flex w-full max-w-6xl bg-transparent gap-12">
         {/* Panel izquierdo */}
         <div className="hidden md:flex w-1/2 items-center justify-center p-12">
           <div className="max-w-md">
-            
             <AuthInfoPanel />
           </div>
         </div>
@@ -68,6 +72,7 @@ const Login: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
+                onClick={() => navigate("/searching-teacher")}
                 className={`w-full py-3 rounded-md font-semibold ${
                   loading
                     ? "bg-gray-400 text-white"
