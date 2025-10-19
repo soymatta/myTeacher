@@ -12,15 +12,15 @@ export default function TeacherProfilePage() {
     <div className="min-h-screen">
       <Header />
 
-      <main className="container mx-auto px-4 py-10 grid lg:grid-cols-3 gap-8">
-        <section className="lg:col-span-2 space-y-8">
+      <main className="container mx-auto px-20 py-10 grid lg:grid-cols-3 gap-8">
+        <section className="lg:col-span-2 space-y-8 mt-20">
           <AboutTeacher />
           <ClassDetails />
           <ReviewCard />
           <PriceTable />
         </section>
 
-        <aside>
+        <aside className="mt-20">
           <TeacherInfoCard />
         </aside>
       </main>
