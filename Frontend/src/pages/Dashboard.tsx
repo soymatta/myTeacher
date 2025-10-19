@@ -10,7 +10,7 @@ interface DashboardProps {
 
 const Dashboard: React.FC<DashboardProps> = ({ role }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-[#F7F7F7]">
       <Header />
       <Navbar role={role} />
       <main className="flex-1 p-6 mt-28">
