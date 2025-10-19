@@ -28,7 +28,7 @@ export default function TeacherHeader() {
         </button>
         <button
           className="flex gap-2 items-center bg-[#F7F7F7] px-2 py-1 rounded-full"
-          onClick={() => navigate("/dashboard")}
+          onClick={() => window.location.href = "/dashboard"}
         >
           <i className="bx  bx-menu bx-xs"></i>
           <div>
