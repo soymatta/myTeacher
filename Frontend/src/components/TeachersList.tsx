@@ -110,7 +110,7 @@ export default function TeachersList() {
         {teachers.map((t) => (
           <button
             key={t.id}
-            className="rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition"
+            className="rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition text-start"
             onClick={() => navigate(`/teacher/${t.id}`)}
           >
             {/* Imagen con overlay para nombre y ubicación */}
