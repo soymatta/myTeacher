@@ -110,7 +110,7 @@ export default function TeachersList() {
         {teachers.map((t) => (
           <button
             key={t.id}
-            className="rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition text-start"
+            className="rounded-2xl overflow-hidden  transition text-start"
             onClick={() => navigate(`/teacher/${t.id}`)}
           >
             {/* Imagen con overlay para nombre y ubicación */}
@@ -118,7 +118,7 @@ export default function TeachersList() {
               <img
                 src={t.image}
                 alt={t.name}
-                className="w-full h-56 object-cover"
+                className="w-full h-70 object-cover"
               />
               <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-4">
                 <h4 className="font-bold text-white text-lg">{t.name}</h4>
