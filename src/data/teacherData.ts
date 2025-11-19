@@ -24,7 +24,7 @@ export const reviews: Review[] = [
     name: "Daniel",
     comment:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer dapibus libero ipsum, vel placerat quam maximus nec.",
-    rating: 5,
+    rating: 4,
   },
   {
     id: 2,
