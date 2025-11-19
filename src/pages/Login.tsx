@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import AuthInfoPanel from "../components/FormInfo";
 import { useNavigate } from "react-router-dom";
+import { getUsers } from "../utils/usuarios";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [usuarios, setUsuarios] = useState<userModel[] | null>(null);
 
   const navigate = useNavigate();
 
@@ -34,15 +36,43 @@ const Login: React.FC = () => {
       return;
     }
 
-    setMessage("🔐 Usuario listo para enviar al backend.");
     setLoading(true);
+    setMessage("🔐 Verificando la existencia de usuario...");
 
-    // Simula petición y redirección
-    setTimeout(() => {
-      setLoading(false);
-      navigate("/searching-teacher");
-    }, 1500);
+    getUsers()
+      .then((data) => {
+        setUsuarios(data);
+
+        const foundUser = data?.find(
+          (user) => user.email === email && user.password === password
+        );
+
+        if (foundUser) {
+          setMessage("✅ ¡Inicio de sesión exitoso!");
+
+          // Guardar datos en localStorage
+          localStorage.setItem("userId", foundUser.id || "");
+          localStorage.setItem("userRole", foundUser.rol);
+          localStorage.setItem("userPic", foundUser.foto || "");
+
+          // Redirección simulada
+          setTimeout(() => {
+            setLoading(false);
+            navigate("/searching-teacher");
+          }, 1500);
+        } else {
+          setMessage("❌ Usuario o contraseña incorrectos.");
+          setLoading(false);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        setMessage("⚠️ Error al conectar con el servidor.");
+        setLoading(false);
+      });
   };
+
+  // Obtener usuario con ese email y password del backend
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 to-blue-300 px-6 md:px-12">
