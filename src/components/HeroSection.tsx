@@ -1,4 +1,4 @@
-import { Search, MapPin } from "lucide-react";
+import { Search } from "lucide-react";
 import CategoriesBar from "./CategoriaBar"; // 👈 importa el componente correcto
 import { useNavigate } from "react-router-dom";
 
@@ -43,19 +43,11 @@ export default function HeroSection() {
       {/* Buscador */}
       <div className="flex justify-center mt-6">
         <div className="flex bg-white rounded-full shadow-lg overflow-hidden w-[90%] md:w-[60%]">
-          <div className="flex items-center gap-2 px-4 w-1/2 border-r">
+          <div className="flex items-center gap-2 px-4 w-full border-r">
             <Search className="w-5 h-5 text-gray-400" />
             <input
               type="text"
               placeholder='Intenta "Inglés"'
-              className="w-full focus:outline-none"
-            />
-          </div>
-          <div className="flex items-center gap-2 px-4 w-1/2 border-r">
-            <MapPin className="w-5 h-5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Dirección o ciudad"
               className="w-full focus:outline-none"
             />
           </div>
