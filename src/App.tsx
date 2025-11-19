@@ -17,6 +17,7 @@ import StudentRequest from "./components/StudentRequest";
 import Messages from "./components/Messages";
 import UserAccountPage from "./components/UserAccount";
 import UserProfileView from "./components/UserProfile";
+import StudentBooking from "./pages/StudentBooking";
 
 function App() {
   // Determina el rol del usuario
