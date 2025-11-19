@@ -33,6 +33,7 @@ const Login: React.FC = () => {
       setMessage("La contraseña debe tener al menos 6 caracteres.");
       return;
     }
+    
 
     setMessage("🔐 Usuario listo para enviar al backend.");
     setLoading(true);
