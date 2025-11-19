@@ -6,6 +6,10 @@ import { useNavigate } from "react-router-dom";
 export default function HeroSection() {
     const navigate = useNavigate();
 
+    const handleSelectRole = (role: "profesor" | "estudiante") => {
+      localStorage.setItem("role", role);
+      navigate("/login");
+    };
 
   return (
     <section className="w-full bg-gradient-to-b from-blue-100 to-blue-300 pb-12 rounded-b-3xl">
@@ -14,17 +18,17 @@ export default function HeroSection() {
         <h1 className="text-2xl font-bold text-[#0A3D62]">myTeacher</h1>
         <div className="flex gap-6 text-gray-800 font-medium">
           <button
-            onClick={() => navigate("/login")}
+            onClick={() => handleSelectRole("profesor")}
             className="hover:text-[#0A3D62] transition"
           >
-            Iniciar Sesión
+            Dar clases particulares
           </button>
 
           <button
-            onClick={() => navigate("/register")}
+            onClick={() => handleSelectRole("estudiante")}
             className="hover:text-[#0A3D62] transition"
           >
-            Registrarse
+            Conectarse
           </button>
         </div>
       </div>

@@ -1,103 +1,34 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-interface Teacher {
-  id: number;
-  name: string;
-  location: string;
-  mode: string;
-  subject: string;
-  description: string;
-  price: string;
-  rating: number;
-  reviews: number;
-  image: string;
-}
-
-const teachers: Teacher[] = [
-  {
-    id: 1,
-    name: "Isabel",
-    location: "Barranquilla",
-    mode: "Presenciales",
-    subject: "Inglés",
-    description:
-      "Licenciada en educación preescolar con 6 años de experiencia, experta en home school.",
-    price: "$60/h",
-    rating: 5,
-    reviews: 10,
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
-  },
-  {
-    id: 2,
-    name: "Christian",
-    location: "Barranquilla",
-    mode: "Presenciales",
-    subject: "Matemáticas",
-    description:
-      "Soy doctor en matemáticas, magíster en matemáticas y matemático.",
-    price: "$60/h",
-    rating: 5,
-    reviews: 15,
-    image: "https://randomuser.me/api/portraits/men/75.jpg",
-  },
-  {
-    id: 3,
-    name: "Isabel",
-    location: "Barranquilla",
-    mode: "Presenciales",
-    subject: "Inglés",
-    description:
-      "Licenciada en educación preescolar con 6 años de experiencia, experta en home school.",
-    price: "$60/h",
-    rating: 5,
-    reviews: 10,
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
-  },
-  {
-    id: 3,
-    name: "Isabel",
-    location: "Barranquilla",
-    mode: "Presenciales",
-    subject: "Inglés",
-    description:
-      "Licenciada en educación preescolar con 6 años de experiencia, experta en home school.",
-    price: "$60/h",
-    rating: 5,
-    reviews: 10,
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
-  },
-  {
-    id: 3,
-    name: "Isabel",
-    location: "Barranquilla",
-    mode: "Presenciales",
-    subject: "Inglés",
-    description:
-      "Licenciada en educación preescolar con 6 años de experiencia, experta en home school.",
-    price: "$60/h",
-    rating: 5,
-    reviews: 10,
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
-  },
-  {
-    id: 3,
-    name: "Isabel",
-    location: "Barranquilla",
-    mode: "Presenciales",
-    subject: "Inglés",
-    description:
-      "Licenciada en educación preescolar con 6 años de experiencia, experta en home school.",
-    price: "$60/h",
-    rating: 5,
-    reviews: 10,
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
-  },
-  // agrega más aquí...
-];
+import { getTutores, type tutorModel } from "../utils/tutores";
+import { getUsers, type userModel } from "../utils/usuarios";
+import DefaultPP from "../assets/img/default_pp.jpg";
+import { getOpiniones, type opinionTutorModel } from "../utils/opinionesTutor";
 
 export default function TeachersList() {
-
   const navigate = useNavigate();
+
+  const [tutores, setTutores] = useState<tutorModel[]>([]);
+  const [usuarios, setUsuarios] = useState<userModel[]>([]);
+  const [opinionesDeTutor, setOpinionesDeTutor] = useState<opinionTutorModel[]>(
+    []
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const [dataTutores, dataUsuarios, dataOpiniones] = await Promise.all([
+        getTutores(),
+        getUsers(),
+        getOpiniones(),
+      ]);
+
+      if (dataTutores) setTutores(dataTutores);
+      if (dataUsuarios) setUsuarios(dataUsuarios);
+      if (dataOpiniones) setOpinionesDeTutor(dataOpiniones);
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <section className="px-6 py-12 max-w-7xl mx-auto">
@@ -107,43 +38,116 @@ export default function TeachersList() {
       </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {teachers.map((t) => (
-          <button
-            key={t.id}
-            className="rounded-2xl overflow-hidden  transition text-start"
-            onClick={() => navigate(`/teacher/${t.id}`)}
-          >
-            {/* Imagen con overlay para nombre y ubicación */}
-            <div className="relative">
-              <img
-                src={t.image}
-                alt={t.name}
-                className="w-full h-70 object-cover"
-              />
-              <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-4">
-                <h4 className="font-bold text-white text-lg">{t.name}</h4>
-                <p className="text-sm text-gray-200">
-                  {t.location} ({t.mode})
-                </p>
-              </div>
-            </div>
+        {tutores.map((tutor) => {
+          /* ============================
+             Usuario del tutor
+          ============================ */
+          const usuario = usuarios.find((u) => u.id === tutor.id_usuario);
 
-            {/* Información debajo */}
-            <div className="p-4 bg-white">
-              <p className="mt-1 text-sm">
-                <span className="font-semibold">{t.subject} - </span>
-                {t.description}
-              </p>
-              <p className="mt-2 font-semibold">{t.price}</p>
-              <p className="text-yellow-500">
-                ★ {t.rating}{" "}
-                <span className="text-gray-500 text-sm">
-                  ({t.reviews} opiniones)
-                </span>
-              </p>
-            </div>
-          </button>
-        ))}
+          /* ============================
+             Opiniones del tutor actual
+          ============================ */
+          const opiniones = opinionesDeTutor.filter(
+            (op) =>
+              String(op.id_tutor).trim() === String(tutor.id_usuario).trim()
+          );
+
+          const cantidadOpiniones = opiniones.length;
+
+          /* ============================
+             Promedio de calificaciones
+          ============================ */
+          const ratingPromedio =
+            cantidadOpiniones > 0
+              ? (
+                  opiniones.reduce((acc, o) => acc + Number(o.rating), 0) /
+                  cantidadOpiniones
+                ).toFixed(1)
+              : "0";
+
+          return (
+            <button
+              key={tutor.id_usuario}
+              className="rounded-2xl overflow-hidden transition text-start"
+              onClick={() => navigate(`/teacher/${tutor.id_usuario}`)}
+            >
+              {/* Imagen */}
+              <div className="relative">
+                <img
+                  src={usuario?.foto || DefaultPP}
+                  alt={usuario?.nombre || "Foto del profesor"}
+                  className="w-full h-72 object-cover"
+                />
+                <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-4">
+                  <h4 className="font-bold text-white text-lg">
+                    {usuario?.nombre}
+                  </h4>
+
+                  {/* Modalidad */}
+                  <p className="text-sm text-gray-200">
+                    {["presencial", "online"]
+                      .filter((m) => tutor.modalidades?.includes(m))
+                      .map((m) =>
+                        m === "presencial" ? "Presencial" : "En línea"
+                      )
+                      .join(" • ") || "Sin modalidad registrada"}
+                  </p>
+                </div>
+              </div>
+
+              {/* Información */}
+              <div className="p-4 bg-white space-y-3">
+                {/* Asignaturas */}
+                <p className="mt-1 text-sm">
+                  <span className="font-semibold">
+                    {tutor.asignaturas?.length
+                      ? tutor.asignaturas.join(", ")
+                      : "Sin asignatura registrada"}
+                  </span>
+                  {" - "}
+                  {tutor.descripcion}
+                </p>
+
+                {/* Tarifas */}
+                <div className="flex gap-3">
+                  {tutor.tarifa_presencial != null && (
+                    <div>
+                      <span className="text-gray-500 text-m">Presencial: </span>
+                      <span className="font-semibold text-sm">
+                        $
+                        {Number(tutor.tarifa_presencial).toLocaleString(
+                          "en-US"
+                        )}
+                      </span>
+                    </div>
+                  )}
+
+                  {tutor.tarifa_online != null && (
+                    <div>
+                      <span className="text-gray-500 text-m">En línea: </span>
+                      <span className="font-semibold text-sm">
+                        ${Number(tutor.tarifa_online).toLocaleString("en-US")}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Rating */}
+                <div className="flex items-center gap-1">
+                  <i className="bx bxs-star bx-xs text-[#E7C817]"></i>
+
+                  {/* Promedio */}
+                  <span className="font-semibold">{ratingPromedio}</span>
+
+                  {/* Cantidad de opiniones */}
+                  <span className="text-gray-500 text-sm">
+                    ({cantidadOpiniones} opiniones)
+                  </span>
+                </div>
+              </div>
+            </button>
+          );
+        })}
       </div>
     </section>
   );

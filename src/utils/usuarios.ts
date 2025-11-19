@@ -1,11 +1,12 @@
 import supabase from "./supabase";
 
 /* ===========================================================
-   USER MODEL (TypeScript)
+   USER MODEL
    =========================================================== */
 export interface userModel {
-  id?: string;
+  id: string;
   nombre: string;
+  foto?: string;
   email: string;
   password: string;
   rol: string;
@@ -38,9 +39,7 @@ export const getUser = async (id: string): Promise<userModel | null> => {
 export const getUsers = async (): Promise<userModel[] | null> => {
   console.log("DEBUG: Obteniendo todos los usuarios...");
 
-  const { data, error, status } = await supabase
-    .from("usuarios")
-    .select("*");
+  const { data, error, status } = await supabase.from("usuarios").select("*");
 
   if (error || status !== 200) {
     console.error("DEBUG: Error al obtener los usuarios:", error?.message);
@@ -54,7 +53,9 @@ export const getUsers = async (): Promise<userModel[] | null> => {
 /* ===========================================================
    CREATE USER
    =========================================================== */
-export const createUser = async (user: userModel): Promise<userModel[] | null> => {
+export const createUser = async (
+  user: userModel
+): Promise<userModel[] | null> => {
   console.log("DEBUG: Intentando crear usuario...");
 
   // Validación de campos obligatorios
@@ -72,7 +73,7 @@ export const createUser = async (user: userModel): Promise<userModel[] | null> =
     return null;
   }
 
-  if (users.some(u => u.email === user.email)) {
+  if (users.some((u) => u.email === user.email)) {
     console.error("DEBUG: El correo ya está en uso.");
     return null;
   }
@@ -84,7 +85,7 @@ export const createUser = async (user: userModel): Promise<userModel[] | null> =
 
   while (exists) {
     newId = crypto.randomUUID();
-    exists = users.some(u => u.id === newId);
+    exists = users.some((u) => u.id === newId);
   }
 
   user.id = newId;
@@ -155,7 +156,7 @@ export const deleteUser = async (id: string): Promise<boolean> => {
     return false;
   }
 
-  if (!users.some(u => u.id === id)) {
+  if (!users.some((u) => u.id === id)) {
     console.error("DEBUG: No existe usuario con ID:", id);
     return false;
   }

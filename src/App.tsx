@@ -32,6 +32,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/teacher/:id" element={<TeacherProfilePage />} />
       <Route path="/searching-teacher" element={<SearchingTeacher />} />
+      <Route path="/student-booking" element={<StudentBooking />} />
 
       {/* 🎓 Dashboard con layout y subrutas */}
       <Route path="/dashboard" element={<Dashboard role={userRole} />}>

@@ -10,40 +10,25 @@ const Login: React.FC = () => {
 
   const navigate = useNavigate();
 
-  // Validación del email
-  const isValidEmail = (email: string) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  };
-
-  const emailIsValid = email.trim() !== "" && isValidEmail(email);
-  const passwordIsValid = password.trim() !== "" && password.length >= 6;
-
-  // Habilitar botón solo si ambos son válidos
-  const isFormValid = emailIsValid && passwordIsValid;
-
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!emailIsValid) {
+    if (!email.includes("@")) {
       setMessage("Por favor ingresa un correo válido.");
       return;
     }
 
-    if (!passwordIsValid) {
+    if (password.length < 6) {
       setMessage("La contraseña debe tener al menos 6 caracteres.");
       return;
     }
-    
 
     setMessage("🔐 Usuario listo para enviar al backend.");
     setLoading(true);
-
-    // Simula petición y redirección
-    setTimeout(() => {
-      setLoading(false);
-      navigate("/searching-teacher");
-    }, 1500);
+    setTimeout(() => setLoading(false), 1500);
   };
+
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 to-blue-300 px-6 md:px-12">
@@ -63,63 +48,36 @@ const Login: React.FC = () => {
             </h2>
 
             <form className="flex flex-col gap-4" onSubmit={handleLogin}>
-              {/* EMAIL */}
               <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="E-mail"
-                className={`w-full px-4 py-3 rounded-md border 
-                  ${
-                    email === ""
-                      ? "border-gray-300"
-                      : emailIsValid
-                      ? "border-green-500"
-                      : "border-red-500"
-                  }
-                  focus:outline-none focus:ring-2 ${
-                    emailIsValid ? "focus:ring-green-500" : "focus:ring-red-500"
-                  }`}
+                className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-
-              {/* PASSWORD */}
               <input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Contraseña"
-                className={`w-full px-4 py-3 rounded-md border 
-                  ${
-                    password === ""
-                      ? "border-gray-300"
-                      : passwordIsValid
-                      ? "border-green-500"
-                      : "border-red-500"
-                  }
-                  focus:outline-none focus:ring-2 ${
-                    passwordIsValid
-                      ? "focus:ring-green-500"
-                      : "focus:ring-red-500"
-                  }`}
+                className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
 
               {message && (
                 <p className="text-sm text-center text-gray-600">{message}</p>
               )}
 
-              {/* BOTÓN */}
               <button
                 type="submit"
-                disabled={!isFormValid || loading}
-                className={`w-full py-3 rounded-md font-semibold transition-all 
-                  ${
-                    isFormValid && !loading
-                      ? "bg-blue-900 text-white hover:bg-blue-800 opacity-100"
-                      : "bg-gray-400 text-white cursor-not-allowed opacity-50"
-                  }
-                `}
+                disabled={loading}
+                onClick={() => navigate("/searching-teacher")}
+                className={`w-full py-3 rounded-md font-semibold ${
+                  loading
+                    ? "bg-gray-400 text-white"
+                    : "bg-blue-900 text-white hover:bg-blue-800"
+                }`}
               >
                 {loading ? "Verificando..." : "Entrar con e-mail"}
               </button>
@@ -131,6 +89,14 @@ const Login: React.FC = () => {
               <span className="px-2 text-sm text-gray-500">o</span>
               <hr className="flex-grow border-gray-300" />
             </div>
+
+            {/* Botones extra */}
+            <button className="w-full py-3 mb-3 rounded-md font-medium bg-gray-100 hover:bg-gray-200">
+              Inicia sesión con Google
+            </button>
+            <button className="w-full py-3 rounded-md font-medium bg-gray-100 hover:bg-gray-200">
+              Inicia sesión con Apple
+            </button>
 
             {/* Texto inferior */}
             <p className="mt-6 text-center text-sm text-gray-600">
