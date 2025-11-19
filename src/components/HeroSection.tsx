@@ -1,31 +1,55 @@
 import { Search } from "lucide-react";
-import CategoriesBar from "./CategoriaBar"; // 👈 importa el componente correcto
+import CategoriesBar from "./CategoriaBar";
 import { useNavigate } from "react-router-dom";
-
+import { useEffect, useState } from "react";
 
 export default function HeroSection() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  // 👉 Booleano que indica si hay sesión iniciada
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Cambia "token" por lo que guardes en localStorage
+    const token = localStorage.getItem("token");
+
+    setIsLoggedIn(!!token); // true si existe, false si no
+  }, []);
 
   return (
     <section className="w-full bg-gradient-to-b from-blue-100 to-blue-300 pb-12 rounded-b-3xl">
       {/* Header */}
       <div className="flex justify-between items-center px-8 py-4">
         <h1 className="text-2xl font-bold text-[#0A3D62]">myTeacher</h1>
-        <div className="flex gap-6 text-gray-800 font-medium">
-          <button
-            onClick={() => navigate("/login")}
-            className="hover:text-[#0A3D62] transition"
-          >
-            Iniciar Sesión
-          </button>
 
+        {/* 👉 Solo mostrar estos botones si NO hay sesión */}
+        {!isLoggedIn && (
+          <div className="flex gap-6 text-gray-800 font-medium">
+            <button
+              onClick={() => navigate("/login")}
+              className="hover:text-[#0A3D62] transition"
+            >
+              Iniciar Sesión
+            </button>
+
+            <button
+              onClick={() => navigate("/register")}
+              className="hover:text-[#0A3D62] transition"
+            >
+              Registrarse
+            </button>
+          </div>
+        )}
+
+        {/* 👉 Si quieres mostrar otro botón cuando SÍ hay sesión, ponlo aquí */}
+        {isLoggedIn && (
           <button
-            onClick={() => navigate("/register")}
-            className="hover:text-[#0A3D62] transition"
+            onClick={() => navigate("/profile")}
+            className="hover:text-[#0A3D62] transition font-medium"
           >
-            Registrarse
+            Mi Perfil
           </button>
-        </div>
+        )}
       </div>
 
       {/* Título */}
@@ -54,7 +78,7 @@ export default function HeroSection() {
 
       {/* Categorías */}
       <div className="mt-10 px-6">
-        <CategoriesBar /> {/* 👈 Aquí se integra el componente */}
+        <CategoriesBar />
       </div>
     </section>
   );
