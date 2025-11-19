@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import AuthInfoPanel from "../components/FormInfo";
+import { createUser } from "../utils/usuarios";
+import type { userModel } from "../utils/usuarios";
+import { setLocalStorage } from "../utils/localStorage";
 
 const Register: React.FC = () => {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isTeacher, setIsTeacher] = useState(false); // 👈 NUEVO
+  const [isTeacher, setIsTeacher] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -18,7 +21,7 @@ const Register: React.FC = () => {
 
   const isFormValid = nombreIsValid && emailIsValid && passwordIsValid;
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!isFormValid) {
@@ -26,20 +29,33 @@ const Register: React.FC = () => {
       return;
     }
 
-    // Aquí se envía todo el registro (incluye isTeacher)
-    const userData = {
-      nombre,
-      email,
-      password,
-      isTeacher, // 👈 LISTO PARA BACKEND
-    };
-
-    console.log("DATOS A ENVIAR:", userData);
-
-    setMessage("Usuario listo para enviar al backend.");
     setLoading(true);
+    setMessage(null);
 
-    setTimeout(() => setLoading(false), 1500);
+    try {
+      // 1. Crear rol automáticamente
+      const rol = isTeacher ? "tutor" : "estudiante";
+
+      // 2. Crear el objeto userModel
+      const user: userModel = {
+        nombre: nombre,
+        email: email,
+        password: password,
+        rol: rol,
+      };
+
+      console.log("Usuario listo para guardar:", user);
+
+      createUser(user);
+      setLocalStorage("user-email", email);
+
+      setMessage("Usuario creado con éxito 🎉");
+    } catch (error: any) {
+      console.error("Error registrando usuario:", error);
+      setMessage("Hubo un error creando el usuario.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

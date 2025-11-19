@@ -4,7 +4,7 @@ import supabase from "./supabase";
    USER MODEL
    =========================================================== */
 export interface userModel {
-  id: string;
+  id?: string;
   nombre: string;
   foto?: string;
   email: string;

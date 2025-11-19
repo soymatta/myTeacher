@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Schedule from "./pages/Schedule";
 import TeacherProfilePage from "./pages/TeacherProfilePage";
 import SearchingTeacher from "./pages/SearchingTeacher";
+import TeacherRegistration from "./pages/RegisterTeacher";
 
 // Layout
 import Dashboard from "./pages/Dashboard";
@@ -33,6 +34,7 @@ function App() {
       <Route path="/teacher/:id" element={<TeacherProfilePage />} />
       <Route path="/searching-teacher" element={<SearchingTeacher />} />
       <Route path="/student-booking" element={<StudentBooking />} />
+      <Route path="/teacher-registration" element={<TeacherRegistration />} />
 
       {/* 🎓 Dashboard con layout y subrutas */}
       <Route path="/dashboard" element={<Dashboard role={userRole} />}>
