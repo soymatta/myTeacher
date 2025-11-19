@@ -19,6 +19,7 @@ import Messages from "./components/Messages";
 import UserAccountPage from "./components/UserAccount";
 import UserProfileView from "./components/UserProfile";
 import StudentBooking from "./pages/StudentBooking";
+import WaitingRoom from "./pages/WaitingRoom";
 
 function App() {
   // Determina el rol del usuario
@@ -35,6 +36,7 @@ function App() {
       <Route path="/searching-teacher" element={<SearchingTeacher />} />
       <Route path="/student-booking" element={<StudentBooking />} />
       <Route path="/teacher-registration" element={<TeacherRegistration />} />
+      <Route path="/waiting-room" element={<WaitingRoom />} />
 
       {/* 🎓 Dashboard con layout y subrutas */}
       <Route path="/dashboard" element={<Dashboard role={userRole} />}>
