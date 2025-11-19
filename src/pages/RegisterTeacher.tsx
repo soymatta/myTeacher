@@ -8,54 +8,63 @@ import {
   Loader2
 } from "lucide-react";
 
+// --- TIPOS E INTERFACES ---
+interface FormData {
+  title: string;
+  about: string;
+  onlineRate: string;
+  inPersonRate: string;
+}
+
+type SubmitStatus = 'success' | 'error' | null;
+
 export default function TeacherRegistration() {
   // --- ESTADOS DEL FORMULARIO ---
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     title: "",
     about: "",
     onlineRate: "",
     inPersonRate: "",
   });
 
-  // Listas dinámicas para selección múltiple
-  const [selectedSubjects, setSelectedSubjects] = useState([]);
-  const [selectedLanguages, setSelectedLanguages] = useState([]);
-  const [selectedLevels, setSelectedLevels] = useState([]);
-  const [selectedModalities, setSelectedModalities] = useState([]);
+  // Listas dinámicas (Arrays de strings)
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
+  const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
+  const [selectedModalities, setSelectedModalities] = useState<string[]>([]);
 
-  // Estado de carga visual
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null); // 'success' | 'error' | null
+  // Estados de UI
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>(null);
 
-  // --- DATOS ESTÁTICOS (Para los dropdowns) ---
-  const availableSubjects = ["Matemáticas", "Inglés", "Física", "Química", "Programación", "Historia", "Música", "Artes"];
-  const availableLanguages = ["Español", "Inglés", "Francés", "Alemán", "Italiano", "Portugués"];
-  const levels = ["Básico", "Intermedio", "Avanzado"];
-  const modalities = ["En línea", "Presencial"];
+  // --- DATOS ESTÁTICOS ---
+  const availableSubjects: string[] = ["Matemáticas", "Inglés", "Física", "Química", "Programación", "Historia", "Música", "Artes"];
+  const availableLanguages: string[] = ["Español", "Inglés", "Francés", "Alemán", "Italiano", "Portugués"];
+  const levels: string[] = ["Básico", "Intermedio", "Avanzado"];
+  const modalities: string[] = ["En línea", "Presencial"];
 
-  // --- HANDLERS (Manejadores de Eventos de UI) ---
+  // --- HANDLERS (Tipados para TypeScript) ---
 
-  // 1. Inputs de texto simples (Título, Biografía, Tarifas)
-  const handleInputChange = (e) => {
+  // 1. Inputs de texto y textarea
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // 2. Manejo de Asignaturas (Select + Chips)
-  const handleAddSubject = (e) => {
+  // 2. Selects (Asignaturas e Idiomas)
+  const handleAddSubject = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const val = e.target.value;
     if (val && !selectedSubjects.includes(val)) {
       setSelectedSubjects([...selectedSubjects, val]);
     }
-    e.target.value = ""; // Resetear el select visualmente
+    e.target.value = ""; // Reset select
   };
 
-  const removeSubject = (sub) => {
+  const removeSubject = (sub: string) => {
     setSelectedSubjects(selectedSubjects.filter((s) => s !== sub));
   };
 
-  // 3. Manejo de Idiomas (Select + Chips)
-  const handleAddLanguage = (e) => {
+  const handleAddLanguage = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const val = e.target.value;
     if (val && !selectedLanguages.includes(val)) {
       setSelectedLanguages([...selectedLanguages, val]);
@@ -63,12 +72,16 @@ export default function TeacherRegistration() {
     e.target.value = "";
   };
 
-  const removeLanguage = (lang) => {
+  const removeLanguage = (lang: string) => {
     setSelectedLanguages(selectedLanguages.filter((l) => l !== lang));
   };
 
-  // 4. Botones Toggle (Niveles y Modalidades)
-  const toggleSelection = (item, list, setList) => {
+  // 3. Toggle Buttons (Recibe el setter explícitamente tipado)
+  const toggleSelection = (
+    item: string, 
+    list: string[], 
+    setList: React.Dispatch<React.SetStateAction<string[]>>
+  ) => {
     if (list.includes(item)) {
       setList(list.filter((i) => i !== item));
     } else {
@@ -76,9 +89,9 @@ export default function TeacherRegistration() {
     }
   };
 
-  // --- SIMULACIÓN DE ENVÍO AL BACKEND ---
+  // --- SIMULACIÓN DE ENVÍO ---
   const handleSubmit = async () => {
-    // 1. Validaciones Frontend
+    // Validaciones
     if (!formData.title || !formData.about || selectedSubjects.length === 0) {
       alert("Por favor completa los campos obligatorios (Título, Acerca de, Asignaturas).");
       return;
@@ -87,16 +100,12 @@ export default function TeacherRegistration() {
     setIsSubmitting(true);
     setSubmitStatus(null);
 
-    // 2. Construcción del Payload (Datos listos para la BD)
-    // Este objeto tiene la estructura exacta para enviar a una API REST o guardar en NoSQL
+    // Construcción del Payload
     const dataToSubmit = {
-      // Aquí el backend inyectaría el ID del usuario autenticado
-      userId: "USER_ID_PLACEHOLDER", 
-      
+      userId: "USER_ID_PLACEHOLDER", // Esto vendrá del Auth Context
       personalInfo: {
         title: formData.title,
         about: formData.about,
-        // En un escenario real, aquí iría la URL de la imagen subida a S3/Cloudinary
         photoUrl: null, 
       },
       skills: {
@@ -113,59 +122,47 @@ export default function TeacherRegistration() {
       },
       metadata: {
         submittedAt: new Date().toISOString(),
-        status: "pending_approval" // Ejemplo de campo de estado inicial
+        status: "pending_approval"
       }
     };
 
-    // 3. Simulación de llamada a API (Dev Mode)
     try {
-      console.log("🚀 [FRONTEND] Preparando envío de datos...");
-      console.log("📦 [PAYLOAD] JSON generado:", JSON.stringify(dataToSubmit, null, 2));
-
-      // Simulamos un retardo de red de 1.5 segundos
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // Simulamos éxito
+      console.log("🚀 [FRONTEND] Payload listo:", dataToSubmit);
+      await new Promise(resolve => setTimeout(resolve, 1500)); // Delay simulado
       setSubmitStatus('success');
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      
     } catch (error) {
-      console.error("Error simulado:", error);
+      console.error(error);
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // --- RENDERIZADO (JSX) ---
-
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 font-sans">
       
-      {/* Cabecera */}
       <div className="max-w-4xl mx-auto mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Registro del profesor</h1>
         <p className="mt-2 text-gray-600">Completa tu perfil para empezar a enseñar en nuestra plataforma</p>
       </div>
 
-      {/* Mensaje de Éxito (Feedback visual) */}
       {submitStatus === 'success' && (
         <div className="max-w-4xl mx-auto mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-center gap-3 text-green-800 animate-in fade-in slide-in-from-top-4 duration-500">
           <CheckCircle2 className="text-green-600" />
           <div>
             <p className="font-bold">¡Datos preparados correctamente!</p>
-            <p className="text-sm">Revisa la consola del navegador (F12) para ver el objeto JSON generado.</p>
+            <p className="text-sm">Revisa la consola (F12) para ver el JSON generado.</p>
           </div>
         </div>
       )}
 
       <div className="max-w-4xl mx-auto space-y-6">
         
-      
+        {/* SECCIÓN 1: INFO PERSONAL */}
         <div className="bg-white shadow-sm rounded-2xl p-6 md:p-8 border border-gray-100">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Información Personal</h2>
 
-          {/* Foto de Perfil (UI Only) */}
           <div className="mb-8 flex flex-col items-center">
             <label className="block text-sm font-medium text-gray-700 mb-4 self-start">Foto de perfil (Opcional)</label>
             <div className="w-32 h-32 rounded-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center mb-4 relative overflow-hidden group cursor-pointer hover:bg-gray-50 transition">
@@ -180,7 +177,6 @@ export default function TeacherRegistration() {
             <p className="mt-2 text-xs text-gray-400">Formatos admitidos: JPG, PNG. Tamaño máximo: 5MB</p>
           </div>
 
-          {/* Título Profesional */}
           <div className="mb-6">
             <label className="block text-sm font-bold text-gray-700 mb-2">Título Profesional</label>
             <input
@@ -193,7 +189,6 @@ export default function TeacherRegistration() {
             />
           </div>
 
-          {/* Acerca del profesor */}
           <div>
             <label className="block text-sm font-bold text-gray-700 mb-2">Acerca del profesor</label>
             <textarea
@@ -201,16 +196,13 @@ export default function TeacherRegistration() {
               rows={5}
               value={formData.about}
               onChange={handleInputChange}
-              placeholder="Cuéntanos sobre tu experiencia, metodología de enseñanza y qué te apasiona..."
+              placeholder="Cuéntanos sobre tu experiencia..."
               className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all resize-none"
             ></textarea>
-            <p className="mt-2 text-xs text-gray-400">Describe tu experiencia y metodología de enseñanza</p>
           </div>
         </div>
 
-        {/* =========================================================
-            SECCIÓN 2: ASIGNATURAS (Estilo Chips)
-           ========================================================= */}
+        {/* SECCIÓN 2: ASIGNATURAS */}
         <div className="bg-white shadow-sm rounded-2xl p-6 md:p-8 border border-gray-100">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Asignaturas que Enseñas</h2>
           
@@ -228,7 +220,6 @@ export default function TeacherRegistration() {
             </div>
           </div>
 
-          {/* Chips Container */}
           <div className="flex flex-wrap gap-2 min-h-[40px]">
             {selectedSubjects.map((sub) => (
               <span key={sub} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-gray-100 text-gray-800 text-sm font-medium animate-in fade-in zoom-in duration-200">
@@ -242,9 +233,7 @@ export default function TeacherRegistration() {
           </div>
         </div>
 
-        {/* =========================================================
-            SECCIÓN 3: IDIOMAS
-           ========================================================= */}
+        {/* SECCIÓN 3: IDIOMAS */}
         <div className="bg-white shadow-sm rounded-2xl p-6 md:p-8 border border-gray-100">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Idiomas que hablas</h2>
           
@@ -275,13 +264,10 @@ export default function TeacherRegistration() {
           </div>
         </div>
 
-        {/* =========================================================
-            SECCIÓN 4: NIVELES Y MODALIDADES
-           ========================================================= */}
+        {/* SECCIÓN 4: NIVELES Y MODALIDADES */}
         <div className="bg-white shadow-sm rounded-2xl p-6 md:p-8 border border-gray-100">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Niveles y modalidades</h2>
           
-          {/* Niveles */}
           <div className="mb-8">
             <label className="block text-sm font-medium text-gray-700 mb-3">Niveles que enseñas</label>
             <div className="flex flex-wrap gap-3">
@@ -304,7 +290,6 @@ export default function TeacherRegistration() {
             </div>
           </div>
 
-          {/* Modalidades */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-3">Modalidades de clase</label>
             <div className="flex flex-wrap gap-3">
@@ -328,9 +313,7 @@ export default function TeacherRegistration() {
           </div>
         </div>
 
-        {/* =========================================================
-            SECCIÓN 5: TARIFAS
-           ========================================================= */}
+        {/* SECCIÓN 5: TARIFAS */}
         <div className="bg-white shadow-sm rounded-2xl p-6 md:p-8 border border-gray-100 mb-8">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Tarifas</h2>
           
@@ -367,9 +350,7 @@ export default function TeacherRegistration() {
           </div>
         </div>
 
-        {/* =========================================================
-            BOTONES DE ACCIÓN
-           ========================================================= */}
+        {/* BOTONES */}
         <div className="flex justify-end gap-4 pt-4 pb-12">
           <button 
             className="px-8 py-3 rounded-lg border border-gray-300 bg-white text-gray-700 font-medium hover:bg-gray-50 transition shadow-sm"
