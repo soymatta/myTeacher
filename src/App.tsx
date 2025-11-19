@@ -20,27 +20,32 @@ import UserAccountPage from "./components/UserAccount";
 import UserProfileView from "./components/UserProfile";
 import StudentBooking from "./pages/StudentBooking";
 import WaitingRoom from "./pages/WaitingRoom";
+import { getLocalStorage } from "./utils/localStorage";
 
 function App() {
-  // Determina el rol del usuario
-  const userRole =
-    (localStorage.getItem("role") as "profesor" | "estudiante") || "profesor";
+  const userRole = getLocalStorage("userRole") || "estudiante";
 
   return (
     <Routes>
       {/* 🏠 Rutas públicas */}
       <Route path="/" element={<Home />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/login" element={<Login />} />
       <Route path="/teacher/:id" element={<TeacherProfilePage />} />
       <Route path="/searching-teacher" element={<SearchingTeacher />} />
       <Route path="/student-booking" element={<StudentBooking />} />
       <Route path="/teacher-registration" element={<TeacherRegistration />} />
       <Route path="/waiting-room" element={<WaitingRoom />} />
 
+      {/* Ocultar register y login para un usuario ingresado */}
+      {!userRole ? (
+        <>
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+        </>
+      ) : null}
+
       {/* 🎓 Dashboard con layout y subrutas */}
       <Route path="/dashboard" element={<Dashboard role={userRole} />}>
-        {userRole === "profesor" ? (
+        {userRole === "tutor" ? (
           <>
             <Route index element={<Navigate to="resumen" replace />} />
             <Route path="resumen" element={<TeacherSummary />} />
